@@ -6201,46 +6201,41 @@ const users = [
 ]
 
 // Quel est le chiffre d'affaires moyen par utilisateur ?
-let totalTurnover = 0;
-users.forEach(element => {
-    totalTurnover += element["revenue"];
-});
-totalTurnover /= 100
-const averageTurnover = (totalTurnover, totalUsers) => totalTurnover/totalUsers;
+const initialValue = 0;
+const totalTurnover = users.reduce(
+  (previousValue, currentValue) => previousValue + currentValue.revenue, initialValue
+);
+const averageTurnover = (totalTurnover, totalUsers) => totalTurnover/100/totalUsers;
 console.log(averageTurnover(totalTurnover, users.length));
 
 
 // Quel est le pourcentage d'utilisateurs ayant rapporté de l'argent (revenue supérieur à 0) ?
-let personWhoBringsMoney = 0;
-users.forEach(element => {
-    if (element["revenue"] > 0) personWhoBringsMoney += 1;
-});
+const personWhoBringsMoney = users.filter(element => element["revenue"] > 0);
 const percentageUsersMadeMoney = (personWhoBringsMoney, totalUsers) => personWhoBringsMoney * 100 / totalUsers ;
-console.log(percentageUsersMadeMoney(personWhoBringsMoney, users.length));
+console.log(percentageUsersMadeMoney(personWhoBringsMoney.length, users.length));
+
 
 // Parmi les utilisateurs ayant rapporté de l'argent, quel est le chiffre d'affaires moyen d'un utilisateur ?
-console.log(totalTurnover/personWhoBringsMoney);
+console.log(totalTurnover/100/personWhoBringsMoney.length);
+
 
 // Combien avons-nous gagné d'argent au total ?
-console.log(totalTurnover);
+console.log(totalTurnover/100);
+
 
 // Combien avons-nous d'utilisateurs en France ?
-let frenchUsers = 0;
-users.forEach(element => {
-    if (element["country"] == "France") frenchUsers += 1;
-});
-console.log(frenchUsers);
+const frenchUsers = users.filter(element => element["country"] == "France");
+console.log(frenchUsers.length);
+
 
 // Parmi ces utilisateurs, combien avons-nous de clients payants en France ?
-let payingFrenchUsers = 0;
-users.forEach(element => {
-    if (element["country"] == "France" && element["revenue"] > 0) payingFrenchUsers += 1;
-});
-console.log(payingFrenchUsers);
+const payingFrenchUsers = frenchUsers.filter(element => element["revenue"] > 0);
+console.log(payingFrenchUsers.length);
+
 
 // Donne-moi le chiffre d'affaires réparti dans nos 4 pays les plus représentés (Allemagne, États-Unis, France, Grande-Bretagne) (chiffre d'affaires total, en France, aux États-Unis, etc.)
 let turnoverCountries = {France: 0, Allemagne: 0, EtatsUnis: 0, GrandeBretagne: 0};
-users.forEach(element => {
+users.map(element => {
     if (element["country"] == "France" ) turnoverCountries["France"] += element["revenue"]/100;
     if (element["country"] == "Germany" ) turnoverCountries["Allemagne"] += element["revenue"]/100;
     if (element["country"] == "United States" ) turnoverCountries["EtatsUnis"] += element["revenue"]/100;
@@ -6248,12 +6243,14 @@ users.forEach(element => {
 });
 console.log(turnoverCountries);
 
+
 // Fais-moi la liste de tous les pays dans lesquels nous avons gagné de l'argent ?
 let listCountries = [];
-users.forEach(element => {
+users.map(element => {
     if (element["revenue"] > 0 && listCountries.includes(element["country"]) ==  false) listCountries.push(element["country"]);
 });
 console.log(listCountries);
+
 
 // Quels sont nos 5 utilisateurs qui nous ont rapporté le plus d'argent ?
 let bestUsers = [];
@@ -6265,24 +6262,21 @@ for(var i = 0; i < 5; i++){
 }
 console.log(bestUsers);
 
+
 // Gagnons-nous plus d'argent auprès des hommes ou des femmes ?
 let sexRevenue = {F: 0, M: 0};
-users.forEach(element => {
+users.map(element => {
     if (element["sex"] == "M" ) sexRevenue["M"] += element["revenue"]/100;
     if (element["sex"] == "F" ) sexRevenue["F"] += element["revenue"]/100;
 });
 console.log(sexRevenue);
 
+
 // Sors-moi les utilisateurs ayant rapporté au moins 75€
-let users75 = [];
-users.forEach(element => {
-    if (element["revenue"]/100 > 75 ) users75.push(element);
-});
+const users75 = users.filter(element => element["revenue"]/100 > 75);
 console.log(users75);
 
+
 // Parmi nos 100 premiers utilisateurs, quel est le pourcentage qui sont des clients payants ?
-let top100UsersMadeMoney = 0;
-for(var i = 0; i < 101; i++){
-    if (users[i]["revenue"] > 0 ) top100UsersMadeMoney += 1;
-}
-console.log(percentageUsersMadeMoney(top100UsersMadeMoney, 100));
+let top100UsersMadeMoney = users.filter((user) => user.revenue > 0 && users.indexOf(user) < 100);
+console.log(percentageUsersMadeMoney(top100UsersMadeMoney.length, 100));
