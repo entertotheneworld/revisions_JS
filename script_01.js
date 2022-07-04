@@ -20,29 +20,32 @@ const entrepreneurs = [
 ];
 
 // Sors une array qui ne contient que le prénom et le nom des entrepreneurs
-entrepreneurs.forEach(element => console.log(element['first'], element['last']));
+entrepreneurs.map(element => console.log(element['first'], element['last']));
 
 
 // Pour chaque entrepreneur, remplace la date de naissance par l'âge de l'entrepreneur qu'il aurait aujourd'hui.
 const ageFunction = year => 2022 - year;
-entrepreneurs.forEach(element => {
+const listAge = entrepreneurs.map(element => {
+    var rObj = {};
     let age;
     age = ageFunction(element['year']);
-    delete element['year'];
-    element['age'] = age;
+    rObj['first'] = element['first'];
+    rObj['last'] = element['last'];
+    rObj['age'] = age;
+    return rObj;
 });
+console.log(listAge);
 
 
 // Les clés first et last manquent de lisibilité, remplace-les par firstName et lastName
-entrepreneurs.forEach(element => {
-    let firstName, lastName;
-    firstName = element['first']
-    lastName = element['last']
-    delete element['first'];
-    delete element['last'];
-    element['firstName'] = firstName;
-    element['lastName'] = lastName;
+const listName = listAge.map(element => {
+    var rObj = {};
+    rObj['firstName'] = element['first'];
+    rObj['lastName'] = element['last'];
+    rObj['age'] = element['age'];
+    return rObj;
 });
+console.log(listName);
 
 
 // Filtre dans cette liste les entrepreneurs qui sont nés dans les années 70
@@ -51,10 +54,5 @@ const functionBorn70s = (age) => {
     year = 2022 - age;
     return (year < 1980 && year > 1969) ? true : false;
 };
-
-const entrepreneurs70s = []
-entrepreneurs.forEach(element => {
-    if (functionBorn70s(element['age'])) { entrepreneurs70s.push(element);}
-});
-
+const entrepreneurs70s = listName.filter(element => functionBorn70s(element['age']));
 console.log(entrepreneurs70s);

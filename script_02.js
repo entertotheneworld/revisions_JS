@@ -14,12 +14,12 @@ const books = [
 ];
 
 // Sors-moi la liste des titres des livres du CDI
-books.forEach(element => console.log(element['title']));
+books.map(element => console.log(element['title']));
 
 
 // Est-ce que tous les livres ont été empruntés au moins une fois ?
 let allBorrowedBooks = true;
-books.forEach(element => {
+books.map(element => {
     if (element['rented'] == 0){
         allBorrowedBooks = false;
     } 
@@ -28,27 +28,25 @@ allBorrowedBooks ? (console.log("Tous les livres ont été empruntés.")) : (con
 
 
 // Quel est le livre le plus emprunté ?
-let mostBorrowedBook;
-for(let index in books) {
-    if (index == 0) mostBorrowedBook = books[index];
-    if (mostBorrowedBook["rented"] < books[index]["rented"]) mostBorrowedBook = books[index];
-}
+const mostBorrowedBook = books.reduce((maxRented, element) =>
+    element.rented > maxRented.rented ? element : maxRented, books[0]
+);
 console.log(mostBorrowedBook);
 
 
 // Quel est le livre le moins emprunté ?
-let leastBorrowedBook;
-for(let index in books) {
-    if (index == 0) leastBorrowedBook = books[index];
-    if (leastBorrowedBook["rented"] > books[index]["rented"]) leastBorrowedBook = books[index];
-}
+const leastBorrowedBook = books.reduce((minRented, element) =>
+    element.rented < minRented.rented ? element : minRented, books[0]
+);
 console.log(leastBorrowedBook);
 
 
 // Supprime le livre avec l'ID 133712
-let indexSpecificId;
-for(let index in books) {
-    if (books[index]["id"] == 133712) indexSpecificId = index;
-}
-books.splice(indexSpecificId, 1)
-console.log(books);
+const indexSpecificId = books.map(element => {
+    var rObj = {};
+    rObj['title'] = element['title'];
+    rObj['id'] = element['id'];
+    rObj['rented'] = element['rented'];
+    if (element.id != 133712) return rObj;
+});
+console.log(indexSpecificId);
